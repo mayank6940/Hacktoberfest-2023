@@ -1,0 +1,39 @@
+# Import Libraies
+import cv2
+import numpy as np
+
+# Import the Cascade..
+cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+# Capture the video frame from the webcam...
+# if you have external camera then put the videocapture(1) becoz external camera is 1.
+click = cv2.VideoCapture(0)
+
+# use a video file as input you have to want a video to detect the faces on it..
+# click = cv2.VideoCapture('face_det.mp4')
+
+while True:
+
+    # Read the video frame..
+    _, img = click.read()
+
+    # convert our video frame to grayscale..
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # DETECT THE MULTIPLE FACES
+    faces = cascade.detectMultiScale(gray, 1.1, 5)
+
+
+    # WE have to draw a rectangle around the faces to show our detected faces..
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x + w, y + h), (145, 60, 255), 2)
+
+    # Display our video
+    cv2.imshow('img', img)
+
+    # stop our video when 'Q'  is pressed
+    q = cv2.waitKey(30) & 0xff
+    if q == ord('q'):
+        break
+print('faces found', len(faces))
+click.release()
